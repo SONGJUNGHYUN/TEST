@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>먹는물 수질검사 수수료 계산기</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 16px 16px 130px;
+    background: #f7f8fa;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    margin: 10px 0 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin: 0 0 12px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 6px;
+  }
+
+  .section {
+    background: white;
+    padding: 14px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  .item-btn, .preset-btn, .sample-btn {
+    min-height: 58px;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    background: #f2f2f2;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .item-name {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .item-name br {
+    display: block;
+  }
+
+  .item-fee {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+  }
+
+  .selected .item-fee {
+    color: #e0e7ff;
+  }
+
+  .partial-selected {
+    background: #fef3c7;
+    border-color: #f59e0b;
+  }
+
+  .empty-cell {
+    visibility: hidden;
+    min-height: 58px;
+  }
+
+  .item-name small,
+  .sub {
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 1.2;
+  }
+
+  .fee-exempt {
+    color: #dc2626;
+    font-weight: bold;
+  }
+
+  .selected .fee-exempt {
+    color: #fecaca;
+  }
+
+  .group-header-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    margin: 12px 0 8px;
+  }
+
+  .group-header {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #e5e7eb;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+
+  .group-count-selected {
+    color: #dc2626;
+    font-weight: 800;
+  }
+
+  .group-clear-btn {
+    min-width: 58px;
+    padding: 8px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .group-clear-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .bottom-result {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #111827;
+    color: white;
+    padding: 14px 18px;
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.25);
+    z-index: 999;
+  }
+
+  .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  #total {
+    color: #facc15;
+  }
+
+
+  .sample-control {
+    display: grid;
+    grid-template-columns: 64px 1fr 64px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .sample-step-btn {
+    min-height: 56px;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    background: #f2f2f2;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .sample-number {
+    min-height: 56px;
+    border: 2px solid #2563eb;
+    border-radius: 10px;
+    background: white;
+    color: #111827;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .sample-help {
+    margin-top: 8px;
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .button-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .span-2, .span-3, .span-4 {
+      grid-column: span 2;
+    }
+
+    .item-name {
+      font-size: 12px;
+    }
+
+    .item-name small,
+    .sub {
+      font-size: 10px;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .button-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .span-2 { grid-column: span 2; }
+    .span-3, .span-4 { grid-column: span 3; }
+
+    .item-name {
+      font-size: 13px;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+  }
+</style>
+</head>
+
+<body>
+
+<h1>먹는물 수질검사 수수료 계산기</h1>
+
+<div class="section">
+  <h2>묶음 검사 항목</h2>
+  <div class="button-grid" id="presetArea"></div>
+</div>
+
+<div class="section">
+  <h2>검사항목</h2>
+  <div id="itemArea"></div>
+</div>
+
+<div class="section">
+  <h2>검체 수</h2>
+  <div id="sampleArea"></div>
+</div>
+
+<div class="bottom-result">
+  <div class="bottom-row">
+    <span>실제 항목 수</span>
+    <span><span id="actualItemCount">0</span>개</span>
+  </div>
+  <div class="bottom-row">
+    <span>검체 수</span>
+    <span><span id="sampleCountText">1</span>개</span>
+  </div>
+  <div class="bottom-row">
+    <span>항목 수수료 합계</span>
+    <span><span id="subtotal">0</span>원</span>
+  </div>
+  <div class="total-row">
+    <span>총 수수료</span>
+    <span><span id="total">0</span>원</span>
+  </div>
+</div>
+
+<script>
+
+const items = [
+  { id: "general_bacteria", group: "미생물", name: "일반세균", fee: 5300, count: 1, span: 1 },
+  { id: "ecoliall", group: "미생물", name: "총대장균군+분원성대장균군", fee: 12600, count: 2, span: 1 },
+  { id: "total_coliform1", group: "미생물", name: "총대장균군", fee: 8800, count: 1, span: 1 },
+  { id: "yersinia", group: "미생물", name: "여시니아균", fee: 28100, count: 1, span: 1 },
+  { id: "ecoli1", group: "미생물", name: "대장균군", fee: 6200, count: 1, span: 1 },
+  { id: "ecoli2", group: "미생물", name: "분원성대장균군", fee: 8400, count: 1, span: 1 },
+
+
+  { id: "lead", group: "건강상 유해영향 무기물질", name: "납", fee: 6100, count: 1, span: 1 },
+  { id: "fluorine", group: "건강상 유해영향 무기물질", name: "불소", fee: 9300, count: 1, span: 1 },
+  { id: "aesenide", group: "건강상 유해영향 무기물질", name: "비소", fee: 7700, count: 1, span: 1 },
+  { id: "selenide", group: "건강상 유해영향 무기물질", name: "셀레늄", fee: 6600, count: 1, span: 1 },
+  { id: "mercury", group: "건강상 유해영향 무기물질", name: "수은", fee: 6600, count: 1, span: 1 },
+  { id: "cyanide", group: "건강상 유해영향 무기물질", name: "시안", fee: 11300, count: 1, span: 1 },
+  { id: "chromium", group: "건강상 유해영향 무기물질", name: "크롬", fee: 3900, count: 1, span: 1 },
+  { id: "nh3n", group: "건강상 유해영향 무기물질", name: "암모니아성질소", fee: 2300, count: 1, span: 1 },
+  { id: "no3n", group: "건강상 유해영향 무기물질", name: "질산성질소", fee: 7200, count: 1, span: 1 },
+  { id: "cadmium", group: "건강상 유해영향 무기물질", name: "카드뮴", fee: 6100, count: 1, span: 1 },
+  { id: "boron", group: "건강상 유해영향 무기물질", name: "붕소", fee: 3100, count: 1, span: 1 },
+  { id: "bro3", group: "건강상 유해영향 무기물질", name: "브롬산염", fee: 7200, count: 1, span: 1 },
+  { id: "uranium", group: "건강상 유해영향 무기물질", name: "우라늄", fee: 10600, count: 1, span: 1 },
+
+
+  { id: "phenol", group: "건강상 유해영향 유기물질", name: "페놀", fee: 9300, count: 1, span: 1 },
+  { id: "pesticides1", group: "건강상 유해영향 유기물질", name: "다이아지논", fee: 15600, count: 1, span: 1},
+  { id: "pesticides2", group: "건강상 유해영향 유기물질", name: "파라티온", fee: 15600, count: 1, span: 1},
+  { id: "pesticides3", group: "건강상 유해영향 유기물질", name: "페니트로티온", fee: 15600, count: 1, span: 1},
+  { id: "carbaryl", group: "건강상 유해영향 유기물질", name: "카바릴", fee: 15700, count: 1, span: 1 },
+  { id: "111tca", group: "건강상 유해영향 유기물질", name: "1,1,1-트리클로로에탄", fee: 19600, count: 1, span: 1 },
+  { id: "pce", group: "건강상 유해영향 유기물질", name: "테트라클로로에틸렌<br><small>PCE</small>", fee: 19600, count: 1, span: 1 },
+  { id: "tce", group: "건강상 유해영향 유기물질", name: "트리클로로에틸렌<br><small>TCE</small>", fee: 19600, count: 1, span: 1 },
+  { id: "diclmethane", group: "건강상 유해영향 유기물질", name: "디클로로메탄", fee: 13600, count: 1, span: 1 },
+  { id: "benzene", group: "건강상 유해영향 유기물질", name: "벤젠", fee: 13600, count: 1, span: 1 },
+  { id: "toluene", group: "건강상 유해영향 유기물질", name: "톨루엔", fee: 13600, count: 1, span: 1 },
+  { id: "ethylbenzene", group: "건강상 유해영향 유기물질", name: "에틸벤젠", fee: 13600, count: 1, span: 1 },
+  { id: "xylene", group: "건강상 유해영향 유기물질", name: "자일렌", fee: 13600, count: 1, span: 1 },
+  { id: "dce", group: "건강상 유해영향 유기물질", name: "1,1-디클로로에틸렌", fee: 13600, count: 1, span: 1 },
+  { id: "ccl4", group: "건강상 유해영향 유기물질", name: "사염화탄소", fee: 13600, count: 1, span: 1 },
+  { id: "12db3cp", group: "건강상 유해영향 유기물질", name: "1,2-디브로모-3-클로로프로판", fee: 21400, count: 1, span: 1 },
+  { id: "14D", group: "건강상 유해영향 유기물질", name: "1,4-다이옥산", fee: 19600, count: 1, span: 1 },
+
+
+  { id: "freecl", group: "소독제 및 소독부산물질", name: "유리잔류염소", fee: 3700, count: 1, span: 1 },
+  { id: "total_thm", group: "소독제 및 소독부산물질", name: "총트리할로메탄", fee: 19600, count: 1, span: 1 },
+  { id: "chloroform", group: "소독제 및 소독부산물질", name: "클로로포름", fee: 19600, count: 1, span: 1 },
+  { id: "bdcm", group: "소독제 및 소독부산물질", name: "브로모디클로로메탄", fee: 19600, count: 1, span: 1 },
+  { id: "dbcm", group: "소독제 및 소독부산물질", name: "디브로모클로로메탄", fee: 19600, count: 1, span: 1 },
+
+  { id: "chloral", group: "소독제 및 소독부산물질", name: "클로랄하이드레이트", fee: 21400, count: 1, span: 1 },
+  { id: "dcan", group: "소독제 및 소독부산물질", name: "디클로로아세토니트릴", fee: 21400, count: 1, span: 1 },
+  { id: "dban", group: "소독제 및 소독부산물질", name: "디브로모아세토니트릴", fee: 21400, count: 1, span: 1 },
+  { id: "tcan", group: "소독제 및 소독부산물질", name: "트리클로로아세토니트릴", fee: 21400, count: 1, span: 1 },
+  { id: "haa", group: "소독제 및 소독부산물질", name: "할로아세틱엑시드", fee: 29200, count: 1, span: 1 },
+  { id: "hcho", group: "소독제 및 소독부산물질", name: "포름알데하이드", fee: 15700, count: 1, span: 1 },
+
+
+  { id: "hardness", group: "심미적 영향물질", name: "경도", fee: 2400, count: 1, span: 1 },
+  { id: "kmno4", group: "심미적 영향물질", name: "과망간산칼륨소비량", fee: 2800, count: 1, span: 1 },
+  { id: "odor", group: "심미적 영향물질", name: "냄새", fee: 600, count: 1, span: 1 },
+  { id: "taste", group: "심미적 영향물질", name: "맛", fee: 300, count: 1, span: 1 },
+  { id: "copper", group: "심미적 영향물질", name: "동", fee: 6100, count: 1, span: 1 },
+  { id: "color", group: "심미적 영향물질", name: "색도", fee: 2600, count: 1, span: 1 },
+  { id: "abs", group: "심미적 영향물질", name: "세제", fee: 9200, count: 1, span: 1 },
+  { id: "ph", group: "심미적 영향물질", name: "pH", fee: 300, count: 1, span: 1 },
+  { id: "zinc", group: "심미적 영향물질", name: "아연", fee: 6100, count: 1, span: 1 },
+  { id: "clion", group: "심미적 영향물질", name: "염소이온", fee: 3900, count: 1, span: 1 },
+  { id: "tsolid", group: "심미적 영향물질", name: "증발잔류물", fee: 2900, count: 1, span: 1 },
+  { id: "iron", group: "심미적 영향물질", name: "철", fee: 6100, count: 1, span: 1 },
+  { id: "manganise", group: "심미적 영향물질", name: "망간", fee: 6100, count: 1, span: 1 },
+  { id: "turb", group: "심미적 영향물질", name: "탁도", fee: 400, count: 1, span: 1 },
+  { id: "so4ion", group: "심미적 영향물질", name: "황산이온", fee: 11800, count: 1, span: 1 },
+  { id: "aluminum", group: "심미적 영향물질", name: "알루미늄", fee: 6100, count: 1, span: 1 },
+
+
+  { id: "lowtempbac", group: "샘물미생물", name: "저온세균", fee: 6100, count: 1, span: 1 },
+  { id: "midtempbac", group: "샘물미생물", name: "중온세균", fee: 5300, count: 1, span: 1 },
+  { id: "total_coliform2", group: "샘물미생물", name: "총대장균군", fee: 8800, count: 1, span: 1 },
+  { id: "fecalstrepto", group: "샘물미생물", name: "분원성연쇄상구균", fee: 9200, count: 1, span: 1 },
+  { id: "pseudomonas", group: "샘물미생물", name: "녹농균", fee: 13100, count: 1, span: 1 },
+  { id: "salmonella", group: "샘물미생물", name: "살모넬라", fee: 15900, count: 1, span: 1 },
+  { id: "shigella", group: "샘물미생물", name: "쉬겔라", fee: 14600, count: 1, span: 1 },
+  { id: "spore", group: "샘물미생물", name: "아황산환원혐기성포자형성균", fee: 5300, count: 1, span: 1 }  
+];
+
+const presets = [
+  {
+    name: "지하수 먹는물<br><small>46항목</small>",
+    items: [
+      "general_bacteria","ecoliall",
+      "lead", "fluorine", "aesenide", "selenide", "mercury", "cyanide", "chromium", "nh3n", "no3n", "cadmium", "boron",
+      "phenol", "pesticides1", "pesticides2", "pesticides3", "carbaryl", "111tca", "pce", "tce", 
+      "diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4", "12db3cp", "14D",
+      "hardness", "kmno4", "odor", "taste", "copper", "color", "abs", "ph", "zinc", "clion", "iron", "manganise", "turb", "so4ion", "aluminum"
+    ]
+  
+  },
+  {
+    name: "상수도<br><small>59항목</small>",
+    items: [
+      "general_bacteria","ecoliall",
+      "lead", "fluorine", "aesenide", "selenide", "mercury", "cyanide", "chromium", "nh3n", "no3n", "cadmium", "boron", "bro3",
+      "phenol", "pesticides1", "pesticides2", "pesticides3", "carbaryl", "111tca", "pce", "tce", 
+      "diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4", "12db3cp", "14D",
+      "freecl", "total_thm", "chloroform", "bdcm", "dbcm", "chloral", "dcan", "dban", "tcan", "haa", "hcho",
+      "hardness", "kmno4", "odor", "taste", "copper", "color", "abs", "ph", "zinc", "clion", "tsolid", "iron", "manganise", "turb", "so4ion", "aluminum"
+    ]
+  },
+  {
+    name: "먹는샘물<br><small>52항목</small>",
+    items: [ 
+      "general_bacteria",
+      "lowtempbac", "total_coliform2", "fecalstrepto", "pseudomonas", "salmonella", "shigella", "spore",
+      "lead", "fluorine", "aesenide", "selenide", "mercury", "cyanide", "chromium", "nh3n", "no3n", "cadmium", "boron", "bro3", "uranium",
+      "phenol", "pesticides1", "pesticides2", "pesticides3", "carbaryl", "111tca", "pce", "tce", 
+      "diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4", "12db3cp", "14D",
+      "hardness", "kmno4", "odor", "copper", "color", "abs", "ph", "zinc", "clion", "iron", "manganise", "turb", "so4ion", "aluminum"
+    ]
+  },
+    {
+    name: "샘물<br><small>48항목</small>",
+    items: [ 
+      "general_bacteria",
+      "lowtempbac", "total_coliform2", "fecalstrepto", "pseudomonas", "salmonella", "shigella", "spore",
+      "lead", "fluorine", "aesenide", "selenide", "mercury", "cyanide", "chromium", "nh3n", "no3n", "cadmium", "boron", "uranium",
+      "phenol", "pesticides1", "pesticides2", "pesticides3", "carbaryl", "111tca", "pce", "tce", 
+      "diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4", "12db3cp", "14D",
+      "kmno4", "odor", "copper", "color", "abs", "ph", "zinc", "clion","turb", "so4ion", "aluminum"
+    ]
+  },
+];
+
+
+const oneFeeGroups = [
+  {
+    name: "유기인계농약",
+    itemIds: ["pesticides1", "pesticides2", "pesticides3"],
+    reason: "유기인계농약 3종 중 1개 이상 선택 시 수수료는 1회만 계산"
+  },
+  {
+    name: "휘발성저급탄화수소",
+    itemIds: ["111tca", "pce", "tce"],
+    reason: "휘발성저급탄화수소 3종 중 1개 이상 선택 시 수수료는 1회만 계산"
+  },
+  {
+    name: "휘발성유기화학물질",
+    itemIds: ["diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4"],
+    reason: "휘발성유기화학물질 7종 중 1개 이상 선택 시 수수료는 1회만 계산"
+  },
+  {
+    name: "트리할로메탄",
+    itemIds: ["total_thm", "chloroform", "bdcm", "dbcm"],
+    reason: "트리할로메탄 4종 중 1개 이상 선택 시 수수료는 1회만 계산"
+  },
+  {
+    name: "소독부산물",
+    itemIds: ["chloral", "dcan", "dban", "tcan"],
+    reason: "소독부산물 4종 중 1개 이상 선택 시 수수료는 1회만 계산"
+  }
+
+];
+
+const toggleSelectButtons = [
+  {
+    group: "건강상 유해영향 유기물질",
+    name: "휘발성저급탄화수소 3종 전체<br><small>1,1,1-트리클로로에탄·PCE·TCE</small>",
+    itemIds: ["111tca", "pce", "tce"],
+    span: 1
+  },
+  {
+    group: "건강상 유해영향 유기물질",
+    name: "유기인계농약 3종 전체<br><small>다이아지논·파라티온·페니트로티온</small>",
+    itemIds: ["pesticides1", "pesticides2", "pesticides3"],
+    span: 1
+  },
+  {
+    group: "건강상 유해영향 유기물질",
+    name: "휘발성유기화학물질 7종 전체<br><small>BTEX, DCM, 1,1-DCE, CCl4</small>",
+    itemIds: ["diclmethane", "benzene", "toluene", "ethylbenzene", "xylene", "dce", "ccl4"],
+    span: 1
+  },
+  {
+    group: "소독제 및 소독부산물질",
+    name: "트리할로메탄 4종 전체<br><small>총THM·클로로포름·BDCM·DBCM</small>",
+    itemIds: ["total_thm", "chloroform", "bdcm", "dbcm"],
+    span: 1
+  },
+  {
+    group: "소독제 및 소독부산물질",
+    name: "소독부산물 4종 전체<br><small>클로랄·DCAN·DBAN·TCAN</small>",
+    itemIds: ["chloral", "dcan", "dban", "tcan"],
+    span: 1
+  }
+];
+
+const dependencyFreeRules = [
+  {
+    targetAnyIds: ["total_thm", "chloroform", "bdcm", "dbcm"],
+    requiredAnyIds: ["111tca", "pce", "tce"],
+    reason: "휘발성저급탄화수소 선택 시 트리할로메탄 수수료 면제"
+  },
+  {
+    targetAnyIds: ["chloral", "dcan", "dban", "tcan"],
+    requiredId: "12db3cp",
+    reason: "1,2-디브로모-3-클로로프로판 선택 시 소독부산물 수수료 면제"
+  }
+];
+
+const selectedItems = new Set();
+const activePresets = new Set();
+const collapsedGroups = {
+  "샘물미생물": true
+};
+let sampleCount = 1;
+
+function renderPresets() {
+  const presetArea = document.getElementById("presetArea");
+  presetArea.innerHTML = "";
+
+  presets.forEach(preset => {
+    const btn = document.createElement("button");
+    btn.className = "preset-btn span-1";
+
+    /*
+      묶음검사 버튼의 선택 상태는 실제 항목 선택 여부와 분리해서 관리한다.
+      예: 지하수 먹는물 46항목이 상수도 59항목에 모두 포함되어도
+      지하수 버튼과 상수도 버튼이 서로 자동으로 연동되어 보이지 않게 한다.
+    */
+    const isActivePreset = activePresets.has(preset.name);
+
+    if (isActivePreset) {
+      btn.classList.add("selected");
+    }
+
+    btn.innerHTML = `
+      <span class="item-name">${isActivePreset ? "✓ " : ""}${preset.name}</span>
+    `;
+
+    btn.onclick = () => {
+      if (isActivePreset) {
+        preset.items.forEach(id => selectedItems.delete(id));
+        activePresets.delete(preset.name);
+      } else {
+        preset.items.forEach(id => selectedItems.add(id));
+        activePresets.add(preset.name);
+      }
+
+      renderPresets();
+      renderItems();
+      calculateTotal();
+    };
+
+    presetArea.appendChild(btn);
+  });
+
+  const clearBtn = document.createElement("button");
+  clearBtn.className = "preset-btn span-1";
+  clearBtn.textContent = "전체 해제";
+
+  clearBtn.onclick = () => {
+    selectedItems.clear();
+    activePresets.clear();
+    renderPresets();
+    renderItems();
+    calculateTotal();
+  };
+
+  presetArea.appendChild(clearBtn);
+}
+
+
+function isDependencyFree(item) {
+  return dependencyFreeRules.some(rule => {
+    const isTarget =
+      rule.targetId === item.id ||
+      (rule.targetAnyIds && rule.targetAnyIds.includes(item.id));
+
+    if (!isTarget) return false;
+
+    if (rule.requiredId && selectedItems.has(rule.requiredId)) {
+      return true;
+    }
+
+    if (rule.requiredAnyIds && rule.requiredAnyIds.some(id => selectedItems.has(id))) {
+      return true;
+    }
+
+    return false;
+  });
+}
+
+function getOneFeeGroup(item) {
+  return oneFeeGroups.find(group => group.itemIds.includes(item.id));
+}
+
+function isOneFeeGroupExempt(item) {
+  const group = getOneFeeGroup(item);
+  if (!group) return false;
+
+  const selectedInGroup = group.itemIds.filter(id => selectedItems.has(id));
+
+  if (selectedInGroup.length === 0) {
+    return false;
+  }
+
+  // 그룹 내에서 선택된 첫 번째 항목만 수수료를 계산하고, 나머지는 면제 처리
+  return selectedInGroup[0] !== item.id;
+}
+
+function shouldShowExempt(item) {
+  return isDependencyFree(item) || isOneFeeGroupExempt(item);
+}
+
+function getEffectiveFee(item) {
+  if (shouldShowExempt(item)) {
+    return 0;
+  }
+
+  return item.fee;
+}
+
+function getFeeText(item) {
+  if (shouldShowExempt(item) && item.fee > 0) {
+    return `<span class="fee-exempt">면제</span>`;
+  }
+
+  return `${item.fee.toLocaleString()}원`;
+}
+
+function renderToggleButton(toggle) {
+  const btn = document.createElement("button");
+  btn.className = `item-btn span-${toggle.span || 1}`;
+
+  const selectedCount = toggle.itemIds.filter(id => selectedItems.has(id)).length;
+  const allSelected = selectedCount === toggle.itemIds.length;
+  const someSelected = selectedCount > 0 && !allSelected;
+
+  if (allSelected) {
+    btn.classList.add("selected");
+  } else if (someSelected) {
+    btn.classList.add("partial-selected");
+  }
+
+  btn.innerHTML = `
+    <span class="item-name">${allSelected ? "✓ " : ""}${toggle.name}</span>
+    <span class="item-fee">${selectedCount}/${toggle.itemIds.length} 선택</span>
+  `;
+
+  btn.onclick = () => {
+    if (allSelected) {
+      toggle.itemIds.forEach(id => selectedItems.delete(id));
+    } else {
+      toggle.itemIds.forEach(id => selectedItems.add(id));
+    }
+
+    activePresets.clear();
+    renderPresets();
+    renderItems();
+    calculateTotal();
+  };
+
+  return btn;
+}
+
+function getGridColumnCount() {
+  if (window.matchMedia("(max-width: 480px)").matches) return 2;
+  if (window.matchMedia("(max-width: 768px)").matches) return 3;
+  return 4;
+}
+
+function getSafeSpan(span) {
+  return Math.min(span || 1, getGridColumnCount());
+}
+
+function createEmptyCell() {
+  const empty = document.createElement("div");
+  empty.className = "empty-cell";
+  return empty;
+}
+
+function padRowToEnd(grid, rowFill) {
+  const columns = getGridColumnCount();
+
+  while (rowFill > 0 && rowFill < columns) {
+    grid.appendChild(createEmptyCell());
+    rowFill += 1;
+  }
+
+  return 0;
+}
+
+function appendButtonToGrid(grid, btn, span, rowFill) {
+  const columns = getGridColumnCount();
+  const safeSpan = Math.min(span || 1, columns);
+
+  if (rowFill + safeSpan > columns) {
+    rowFill = padRowToEnd(grid, rowFill);
+  }
+
+  grid.appendChild(btn);
+  rowFill += safeSpan;
+
+  if (rowFill >= columns) {
+    rowFill = 0;
+  }
+
+  return rowFill;
+}
+
+function appendToggleAtRowEnd(grid, toggle, rowFill) {
+  const columns = getGridColumnCount();
+  const toggleSpan = getSafeSpan(toggle.span || 1);
+
+  if (toggleSpan >= columns) {
+    rowFill = padRowToEnd(grid, rowFill);
+    grid.appendChild(renderToggleButton(toggle));
+    return 0;
+  }
+
+  if (rowFill + toggleSpan > columns) {
+    rowFill = padRowToEnd(grid, rowFill);
+  }
+
+  while (rowFill < columns - toggleSpan) {
+    grid.appendChild(createEmptyCell());
+    rowFill += 1;
+  }
+
+  grid.appendChild(renderToggleButton(toggle));
+  rowFill += toggleSpan;
+
+  if (rowFill >= columns) {
+    rowFill = 0;
+  }
+
+  return rowFill;
+}
+
+function createItemButton(item) {
+  const btn = document.createElement("button");
+  btn.className = `item-btn span-${item.span || 1}`;
+
+  if (selectedItems.has(item.id)) {
+    btn.classList.add("selected");
+  }
+
+  btn.innerHTML = `
+    <span class="item-name">${selectedItems.has(item.id) ? "✓ " : ""}${item.name}</span>
+    <span class="item-fee">${getFeeText(item)}</span>
+  `;
+
+  btn.onclick = () => {
+    if (selectedItems.has(item.id)) {
+      selectedItems.delete(item.id);
+    } else {
+      selectedItems.add(item.id);
+    }
+
+    activePresets.clear();
+    renderPresets();
+    renderItems();
+    calculateTotal();
+  };
+
+  return btn;
+}
+
+function getTogglesByFirstItemId(groupName) {
+  const result = {};
+
+  toggleSelectButtons
+    .filter(toggle => toggle.group === groupName)
+    .forEach(toggle => {
+      const firstItemId = toggle.itemIds[0];
+
+      if (!result[firstItemId]) {
+        result[firstItemId] = [];
+      }
+
+      result[firstItemId].push(toggle);
+    });
+
+  return result;
+}
+
+function renderItems() {
+  const itemArea = document.getElementById("itemArea");
+  itemArea.innerHTML = "";
+
+  const groups = {};
+
+  items.forEach(item => {
+    if (!groups[item.group]) {
+      groups[item.group] = [];
+    }
+    groups[item.group].push(item);
+  });
+
+  Object.keys(groups).forEach(groupName => {
+    if (collapsedGroups[groupName] === undefined) {
+      collapsedGroups[groupName] = false;
+    }
+
+    const selectedInGroup = groups[groupName].filter(item => selectedItems.has(item.id)).length;
+    const totalInGroup = groups[groupName].length;
+
+    const groupHeaderRow = document.createElement("div");
+    groupHeaderRow.className = "group-header-row";
+
+    const groupHeader = document.createElement("button");
+    groupHeader.className = "group-header";
+    const selectedCountHtml = selectedInGroup > 0
+      ? `<span class="group-count-selected">${selectedInGroup}</span>`
+      : `${selectedInGroup}`;
+
+    groupHeader.innerHTML =
+      `${collapsedGroups[groupName] ? "▶" : "▼"} ${groupName} ` +
+      `(${selectedCountHtml}/${totalInGroup})`;
+
+    groupHeader.onclick = () => {
+      collapsedGroups[groupName] = !collapsedGroups[groupName];
+      renderItems();
+    };
+
+    const groupClearBtn = document.createElement("button");
+    groupClearBtn.className = "group-clear-btn";
+    groupClearBtn.textContent = "해제";
+    groupClearBtn.disabled = selectedInGroup === 0;
+    groupClearBtn.onclick = () => {
+      groups[groupName].forEach(item => selectedItems.delete(item.id));
+      activePresets.clear();
+      renderPresets();
+      renderItems();
+      calculateTotal();
+    };
+
+    groupHeaderRow.appendChild(groupHeader);
+    groupHeaderRow.appendChild(groupClearBtn);
+    itemArea.appendChild(groupHeaderRow);
+
+    if (!collapsedGroups[groupName]) {
+      const grid = document.createElement("div");
+      grid.className = "button-grid";
+
+      let rowFill = 0;
+
+      const groupToggles = toggleSelectButtons.filter(toggle => toggle.group === groupName);
+      groupToggles.forEach(toggle => {
+        rowFill = appendButtonToGrid(grid, renderToggleButton(toggle), toggle.span || 1, rowFill);
+      });
+
+      // 토글 버튼들은 그룹 맨 앞에 모아 배치하고, 다음 줄부터 개별 항목을 표시한다.
+      if (groupToggles.length > 0) {
+        rowFill = padRowToEnd(grid, rowFill);
+      }
+
+      groups[groupName].forEach(item => {
+        rowFill = appendButtonToGrid(grid, createItemButton(item), item.span || 1, rowFill);
+
+      });
+
+      itemArea.appendChild(grid);
+    }
+  });
+}
+
+function changeSampleCount(delta) {
+  const next = Math.max(1, Math.min(99, sampleCount + delta));
+  if (next === sampleCount) return;
+  sampleCount = next;
+  renderSampleButtons();
+  calculateTotal();
+}
+
+function renderSampleButtons() {
+  const sampleArea = document.getElementById("sampleArea");
+  sampleArea.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "sample-control";
+
+  const minusBtn = document.createElement("button");
+  minusBtn.className = "sample-step-btn";
+  minusBtn.textContent = "−";
+  minusBtn.onclick = () => changeSampleCount(-1);
+
+  const numberInput = document.createElement("input");
+  numberInput.className = "sample-number";
+  numberInput.type = "number";
+  numberInput.min = "1";
+  numberInput.max = "99";
+  numberInput.value = sampleCount;
+
+  numberInput.oninput = () => {
+    const value = Number(numberInput.value);
+    if (!Number.isNaN(value) && value >= 1) {
+      sampleCount = Math.min(99, Math.floor(value));
+      calculateTotal();
+    }
+  };
+
+  numberInput.onblur = () => {
+    if (!numberInput.value || Number(numberInput.value) < 1) {
+      sampleCount = 1;
+    }
+    numberInput.value = sampleCount;
+    calculateTotal();
+  };
+
+  const plusBtn = document.createElement("button");
+  plusBtn.className = "sample-step-btn";
+  plusBtn.textContent = "+";
+  plusBtn.onclick = () => changeSampleCount(1);
+
+  wrapper.appendChild(minusBtn);
+  wrapper.appendChild(numberInput);
+  wrapper.appendChild(plusBtn);
+
+  const help = document.createElement("div");
+  help.className = "sample-help";
+  help.textContent = "− / + 버튼 또는 숫자 직접 입력";
+
+  sampleArea.appendChild(wrapper);
+  sampleArea.appendChild(help);
+}
+
+function calculateTotal() {
+  const selected = items.filter(item => selectedItems.has(item.id));
+
+  const subtotal = selected.reduce((sum, item) => sum + getEffectiveFee(item), 0);
+  const actualItemCount = selected.reduce((sum, item) => sum + item.count, 0);
+  const total = subtotal * sampleCount;
+
+  document.getElementById("actualItemCount").textContent = actualItemCount;
+  document.getElementById("sampleCountText").textContent = sampleCount;
+  document.getElementById("subtotal").textContent = subtotal.toLocaleString();
+  document.getElementById("total").textContent = total.toLocaleString();
+}
+
+renderPresets();
+renderItems();
+renderSampleButtons();
+calculateTotal();
+
+window.addEventListener("resize", () => {
+  renderItems();
+});
+</script>
+
+</body>
+</html>
