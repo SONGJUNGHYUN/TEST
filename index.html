@@ -2,16 +2,26 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>먹는물 수질검사 수수료 계산기</title>
 
 <style>
+  html {
+    background: #f7f8fa;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: 0 auto;
     padding: 16px 16px 130px;
     background: #f7f8fa;
     color:#111827;
+    max-width: 960px;
+    box-sizing: border-box;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
   }
 
   h1 {
@@ -49,6 +59,7 @@
     color:#111827;
     -webkit-appearance:none;
     appearance:none;
+    touch-action: manipulation;
   }
 
   .item-btn, .preset-btn, .sample-btn {
@@ -143,7 +154,7 @@
   }
 
   .group-clear-btn {
-    min-width: 58px;
+    min-width: 74px;
     padding: 8px 10px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -161,9 +172,13 @@
 
   .bottom-result {
     position: fixed;
-    left: 0;
-    right: 0;
+    left: 50%;
+    right: auto;
     bottom: 0;
+    width: 100%;
+    max-width: 960px;
+    transform: translateX(-50%);
+    box-sizing: border-box;
     background: #111827;
     color: white;
     padding: 14px 18px;
@@ -832,10 +847,13 @@ function renderItems() {
 
     const groupClearBtn = document.createElement("button");
     groupClearBtn.className = "group-clear-btn";
-    groupClearBtn.textContent = "해제";
-    groupClearBtn.disabled = selectedInGroup === 0;
+    groupClearBtn.textContent = selectedInGroup === 0 ? "전체선택" : "전체해제";
     groupClearBtn.onclick = () => {
-      groups[groupName].forEach(item => selectedItems.delete(item.id));
+      if (selectedInGroup === 0) {
+        groups[groupName].forEach(item => selectedItems.add(item.id));
+      } else {
+        groups[groupName].forEach(item => selectedItems.delete(item.id));
+      }
       activePresets.clear();
       renderPresets();
       renderItems();
@@ -953,6 +971,26 @@ calculateTotal();
 window.addEventListener("resize", () => {
   renderItems();
 });
+
+// iPhone/Safari에서 두 번 터치 확대 및 핀치 확대를 최대한 방지
+let lastTouchEnd = 0;
+
+document.addEventListener('touchend', function(event) {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
+document.addEventListener('gesturestart', function(event) {
+  event.preventDefault();
+}, { passive: false });
+
+document.addEventListener('gesturechange', function(event) {
+  event.preventDefault();
+}, { passive: false });
+
 </script>
 
 </body>
