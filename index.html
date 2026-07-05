@@ -2,26 +2,16 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>먹는물 수질검사 수수료 계산기</title>
 
 <style>
-  html {
-    background: #f7f8fa;
-    touch-action: manipulation;
-    -webkit-text-size-adjust: 100%;
-  }
-
   body {
     font-family: Arial, sans-serif;
-    margin: 0 auto;
+    margin: 0;
     padding: 16px 16px 130px;
     background: #f7f8fa;
     color:#111827;
-    max-width: 960px;
-    box-sizing: border-box;
-    touch-action: manipulation;
-    -webkit-text-size-adjust: 100%;
   }
 
   h1 {
@@ -59,7 +49,6 @@
     color:#111827;
     -webkit-appearance:none;
     appearance:none;
-    touch-action: manipulation;
   }
 
   .item-btn, .preset-btn, .sample-btn {
@@ -172,13 +161,9 @@
 
   .bottom-result {
     position: fixed;
-    left: 50%;
-    right: auto;
+    left: 0;
+    right: 0;
     bottom: 0;
-    width: 100%;
-    max-width: 960px;
-    transform: translateX(-50%);
-    box-sizing: border-box;
     background: #111827;
     color: white;
     padding: 14px 18px;
@@ -971,26 +956,6 @@ calculateTotal();
 window.addEventListener("resize", () => {
   renderItems();
 });
-
-// iPhone/Safari에서 두 번 터치 확대 및 핀치 확대를 최대한 방지
-let lastTouchEnd = 0;
-
-document.addEventListener('touchend', function(event) {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, { passive: false });
-
-document.addEventListener('gesturestart', function(event) {
-  event.preventDefault();
-}, { passive: false });
-
-document.addEventListener('gesturechange', function(event) {
-  event.preventDefault();
-}, { passive: false });
-
 </script>
 
 </body>
