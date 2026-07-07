@@ -490,7 +490,7 @@
   }
 
   .selected-detail-title::after {
-    content: "아래 버튼으로 닫기";
+    content: "바텀시트 클릭 시 닫기";
     font-size: 11px;
     color: #9ca3af;
     font-weight: 600;
@@ -561,6 +561,44 @@
     }
   }
 
+  /* 섹션 제목 sticky: 기준검사 항목 / 검사항목 / 검체 수 */
+  .section {
+    overflow: visible;
+  }
+
+  .section h2 {
+    position: sticky;
+    top: 0;
+    z-index: 760;
+    margin: -4px -2px 12px;
+    padding: 12px 10px 9px;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+  }
+
+  /* 검사 그룹 헤더는 섹션 제목 아래에 붙도록 배치 */
+  .group-header-row {
+    top: 48px;
+  }
+
+  .bottom-result {
+    cursor: pointer;
+  }
+
+  .sheet-handle {
+    width: 42px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.32);
+    margin: 0 auto 10px;
+  }
+
+  .bottom-result.detail-open .sheet-handle {
+    background: rgba(255,255,255,0.42);
+  }
+
 </style>
 </head>
 
@@ -585,7 +623,8 @@
 
 <div class="detail-backdrop" id="detailBackdrop" onclick="closeDetailView()"></div>
 
-<div class="bottom-result">
+<div class="bottom-result" id="bottomResult" onclick="toggleDetailViewFromSheet(event)">
+  <div class="sheet-handle"></div>
   <div class="bottom-row">
     <span>실제 항목 수</span>
     <span><span id="actualItemCount">0</span>개</span>
@@ -609,7 +648,6 @@
   </div>
 </div>
 
-<button class="detail-toggle-btn" id="detailToggleBtn" onclick="toggleDetailView()">상세<br>보기</button>
 
 <script>
 
@@ -1273,17 +1311,20 @@ function setDetailView(open) {
   detailOpen = open;
 
   const bottom = document.querySelector(".bottom-result");
-  const btn = document.getElementById("detailToggleBtn");
   const backdrop = document.getElementById("detailBackdrop");
 
   bottom.classList.toggle("detail-open", detailOpen);
-  btn.classList.toggle("active", detailOpen);
   backdrop.classList.toggle("show", detailOpen);
-  btn.innerHTML = detailOpen ? "되돌<br>리기" : "상세<br>보기";
 }
 
 function toggleDetailView() {
   setDetailView(!detailOpen);
+}
+
+function toggleDetailViewFromSheet(event) {
+  // 바텀시트 자체를 눌렀을 때 열기/닫기 전환
+  // 상세 목록 내부 텍스트를 드래그하거나 스크롤하는 경우에는 동작을 방해하지 않도록 최소 처리
+  toggleDetailView();
 }
 
 function closeDetailView() {
@@ -1313,6 +1354,24 @@ calculateTotal();
 window.addEventListener("resize", () => {
   renderItems();
 });
+
+
+// 모바일에서 바텀시트를 아래로 스와이프하면 닫힘
+let sheetTouchStartY = 0;
+const bottomSheet = document.getElementById("bottomResult");
+
+bottomSheet.addEventListener("touchstart", function(event) {
+  if (!detailOpen) return;
+  sheetTouchStartY = event.touches[0].clientY;
+}, { passive: true });
+
+bottomSheet.addEventListener("touchend", function(event) {
+  if (!detailOpen) return;
+  const touchEndY = event.changedTouches[0].clientY;
+  if (touchEndY - sheetTouchStartY > 70) {
+    closeDetailView();
+  }
+}, { passive: true });
 
 
 // 모바일 Safari에서 더블탭 확대와 핀치 확대를 최대한 방지
