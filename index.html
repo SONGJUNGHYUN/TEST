@@ -903,7 +903,7 @@
 
 <div id="calculatorContent" class="hidden">
 <div class="section">
-  <h2>기준검사 항목</h2>
+  <h2>자주 사용하는 검사항목</h2>
   <div class="button-grid" id="presetArea"></div>
 </div>
 
@@ -950,7 +950,7 @@
     <h2>관계법령</h2>
     <div class="legal-toolbar">
       <input id="legalSearch" class="legal-search" type="search" placeholder="업무명·법령명·키워드 검색" aria-label="관계법령 검색">
-      <div class="legal-count"><span id="legalResultCount">8</span>건</div>
+      <div class="legal-count"><span id="legalResultCount">9</span>건</div>
     </div>
     <div id="legalCardArea"></div>
   </div>
@@ -988,8 +988,8 @@ const drinkingItems = [
   { id: "pesticides3", group: "건강상 유해영향 유기물질", name: "페니트로티온", fee: 15600, count: 1, span: 1},
   { id: "carbaryl", group: "건강상 유해영향 유기물질", name: "카바릴", fee: 15700, count: 1, span: 1 },
   { id: "111tca", group: "건강상 유해영향 유기물질", name: "1,1,1-트리클로로에탄", fee: 19600, count: 1, span: 1 },
-  { id: "pce", group: "건강상 유해영향 유기물질", name: "테트라클로로에틸렌<br><small>PCE</small>", fee: 19600, count: 1, span: 1 },
-  { id: "tce", group: "건강상 유해영향 유기물질", name: "트리클로로에틸렌<br><small>TCE</small>", fee: 19600, count: 1, span: 1 },
+  { id: "pce", group: "건강상 유해영향 유기물질", name: "테트라클로로에틸렌<br><small>(PCE)</small>", fee: 19600, count: 1, span: 1 },
+  { id: "tce", group: "건강상 유해영향 유기물질", name: "트리클로로에틸렌<br><small>(TCE)</small>", fee: 19600, count: 1, span: 1 },
   { id: "diclmethane", group: "건강상 유해영향 유기물질", name: "디클로로메탄", fee: 13600, count: 1, span: 1 },
   { id: "benzene", group: "건강상 유해영향 유기물질", name: "벤젠", fee: 13600, count: 1, span: 1 },
   { id: "toluene", group: "건강상 유해영향 유기물질", name: "톨루엔", fee: 13600, count: 1, span: 1 },
@@ -1124,7 +1124,6 @@ const drinkingPresets = [
 
 ];
 
-
 const drinkingOneFeeGroups = [
   {
     name: "유기인계농약",
@@ -1200,30 +1199,28 @@ const drinkingDependencyFreeRules = [
   }
 ];
 
-
-/* 수질오염 분야 예시 데이터: 실제 백데이터로 교체해서 사용 */
 const pollutionItems = [
-  { id: "wp_ph", group: "생활환경 기준", name: "pH<br><small>수소이온농도</small>", fee: 800, count: 1, span: 1 },
-  { id: "wp_do", group: "생활환경 기준", name: "DO<br><small>용존산소</small>", fee: 2800, count: 1, span: 1 },
-  { id: "wp_bod", group: "생활환경 기준", name: "BOD<br><small>생물화학적산소요구량</small>", fee: 5800, count: 1, span: 1 },
-  { id: "wp_cod", group: "생활환경 기준", name: "COD<br><small>화학적산소요구량</small>", fee: 7300, count: 1, span: 1 },
-  { id: "wp_toc", group: "생활환경 기준", name: "TOC<br><small>총유기탄소</small>", fee: 7300, count: 1, span: 1 },
-  { id: "wp_ss", group: "생활환경 기준", name: "SS<br><small>부유물질</small>", fee: 2800, count: 1, span: 1 },
-  { id: "wp_tn", group: "생활환경 기준", name: "T-N<br><small>총질소</small>", fee: 3700, count: 1, span: 1 },
-  { id: "wp_tp", group: "생활환경 기준", name: "T-P<br><small>총인</small>", fee: 3400, count: 1, span: 1 },
-  { id: "wp_ecoli1", group: "생활환경 기준", name: "총대장균군수", fee: 14800, count: 1, span: 1 },
-  { id: "wp_ecoli2", group: "생활환경 기준", name: "분원성대장균군수", fee: 11400, count: 1, span: 1 },
-  { id: "wp_chla", group: "생활환경 기준", name: "클로로필a", fee: 1300, count: 1, span: 1 },
+  { id: "wp_ph", group: "생활환경기준", name: "수소이온농도", fee: 800, count: 1, span: 1 },
+  { id: "wp_do", group: "생활환경기준", name: "용존산소", fee: 2800, count: 1, span: 1 },
+  { id: "wp_bod", group: "생활환경기준", name: "생물화학적산소요구량<br><small>(BOD)</small>", fee: 5800, count: 1, span: 1 },
+  { id: "wp_cod", group: "생활환경기준", name: "화학적산소요구량<br><small>(COD)</small>", fee: 7300, count: 1, span: 1 },
+  { id: "wp_toc", group: "생활환경기준", name: "총유기탄소<br><small>(TOC)</small>", fee: 7300, count: 1, span: 1 },
+  { id: "wp_ss", group: "생활환경기준", name: "부유물질<br><small>(SS)</small>", fee: 2800, count: 1, span: 1 },
+  { id: "wp_tn", group: "생활환경기준", name: "총질소<br><small>(T-N)</small>", fee: 3700, count: 1, span: 1 },
+  { id: "wp_tp", group: "생활환경기준", name: "총인<br><small>(T-P)</small>", fee: 3400, count: 1, span: 1 },
+  { id: "wp_ecoli1", group: "생활환경기준", name: "총대장균군수", fee: 14800, count: 1, span: 1 },
+  { id: "wp_ecoli2", group: "생활환경기준", name: "분원성대장균군수", fee: 11400, count: 1, span: 1 },
+  { id: "wp_chla", group: "생활환경기준", name: "클로로필a", fee: 1300, count: 1, span: 1 },
 
   { id: "wp_cd", group: "사람의 건강보호기준", name: "카드뮴", fee: 6900, count: 1, span: 1 },
-  { id: "wp_pd", group: "사람의 건강보호기준", name: "납", fee: 6900, count: 1, span: 1 },
+  { id: "wp_pb", group: "사람의 건강보호기준", name: "납", fee: 6900, count: 1, span: 1 },
   { id: "wp_sb", group: "사람의 건강보호기준", name: "안티몬", fee: 6900, count: 1, span: 1 },
   { id: "wp_as", group: "사람의 건강보호기준", name: "비소", fee: 13900, count: 1, span: 1 },
   { id: "wp_cn", group: "사람의 건강보호기준", name: "시안", fee: 13100, count: 1, span: 1 },
   { id: "wp_hg", group: "사람의 건강보호기준", name: "수은", fee: 10600, count: 1, span: 1 },
-  { id: "wp_cr", group: "사람의 건강보호기준", name: "6가 크롬", fee: 6900, count: 1, span: 1 },
+  { id: "wp_cr6", group: "사람의 건강보호기준", name: "6가 크롬", fee: 6900, count: 1, span: 1 },
   { id: "wp_hcho", group: "사람의 건강보호기준", name: "포름알데히드", fee: 15700, count: 1, span: 1 },
-  { id: "wp_dehp", group: "사람의 건강보호기준", name: "디에틸헥실프탈레이트<br><small>DEHP</small>", fee: 20300, count: 1, span: 1 },
+  { id: "wp_dehp", group: "사람의 건강보호기준", name: "디에틸헥실프탈레이트<br><small>(DEHP)</small>", fee: 20300, count: 1, span: 1 },
   { id: "wp_ccl4", group: "사람의 건강보호기준", name: "사염화탄소", fee: 13600, count: 1, span: 1 },
   { id: "wp_c6h6", group: "사람의 건강보호기준", name: "벤젠", fee: 13600, count: 1, span: 1 },
   { id: "wp_12dce", group: "사람의 건강보호기준", name: "1,2-디클로로에탄", fee: 13600, count: 1, span: 1 },
@@ -1234,13 +1231,52 @@ const pollutionItems = [
   { id: "wp_pcb", group: "사람의 건강보호기준", name: "PCB", fee: 125200, count: 1, span: 1 },
   { id: "wp_abs", group: "사람의 건강보호기준", name: "ABS", fee: 13200, count: 1, span: 1 },
   { id: "wp_14d", group: "사람의 건강보호기준", name: "1,4-다이옥세인", fee: 19600, count: 1, span: 1 },
+
+  { id: "wp_temp", group: "기타항목", name: "온도", fee: 300, count: 1, span: 1 },
+  { id: "wp_turb", group: "기타항목", name: "탁도", fee: 400, count: 1, span: 1 },
+  { id: "wp_ec", group: "기타항목", name: "전기전도도", fee: 3000, count: 1, span: 1 },
+
+  { id: "wp_ecoli_waterplay", group: "기타항목", name: "물놀이 대장균", fee: 12600, count: 1, span: 1 },
+
+  { id: "wp_NH3N", group: "기타항목", name: "NH3-N", fee: 10800, count: 1, span: 1 },
+  { id: "wp_NO2-N", group: "기타항목", name: "NO2-N", fee: 2800, count: 1, span: 1 },
+  { id: "wp_NO3N", group: "기타항목", name: "NO3-N", fee: 5400, count: 1, span: 1 },
+  { id: "wp_PO4P", group: "기타항목", name: "PO4-P", fee: 5600, count: 1, span: 1 },
+
+  { id: "wp_clion", group: "기타항목", name: "염소이온", fee: 2900, count: 1, span: 1 },
+  { id: "wp_fluorine", group: "기타항목", name: "불소", fee: 7400, count: 1, span: 1 },
+
+  { id: "wp_zn", group: "기타항목", name: "아연", fee: 6900, count: 1, span: 1 },
+  { id: "wp_cu", group: "기타항목", name: "구리", fee: 6900, count: 1, span: 1 },
+  { id: "wp_ni", group: "기타항목", name: "니켈", fee: 6900, count: 1, span: 1 },
+  { id: "wp_mn", group: "기타항목", name: "망간", fee: 6900, count: 1, span: 1 },
+  { id: "wp_fe", group: "기타항목", name: "철", fee: 6900, count: 1, span: 1 },
+  { id: "wp_se", group: "기타항목", name: "셀레늄", fee: 6000, count: 1, span: 1 },
+  { id: "wp_cr", group: "기타항목", name: "크롬", fee: 6900, count: 1, span: 1 },
+
+  { id: "wp_nhex_ex", group: "기타항목", name: "노말헥산 추출물질", fee: 6000, count: 1, span: 1 },
+  { id: "wp_nhex_ex_oil", group: "기타항목", name: "노말헥산 추출물질 중 <br>광유류", fee: 15400, count: 1, span: 1 },
+  { id: "wp_nhex_ex_etc", group: "기타항목", name: "노말헥산 추출물질 중 <br>동물류, 식물류", fee: 15400, count: 1, span: 1 },
+
+  { id: "wp_phenols", group: "기타항목", name: "페놀류", fee: 7800, count: 1, span: 1 },
+  { id: "wp_dia_para", group: "기타항목", name: "다이아지논+파라티온", fee: 20300, count: 2, span: 1 },
+  { id: "wp_111tce", group: "기타항목", name: "1,1,1-트리클로로에탄", fee: 13900, count: 1, span: 1 },
+  { id: "wp_tce", group: "기타항목", name: "트리클로로에틸렌", fee: 13900, count: 1, span: 1 },
+
+  { id: "wp_tol", group: "기타항목", name: "톨루엔", fee: 13600, count: 1, span: 1 },
+  { id: "wp_eb", group: "기타항목", name: "에틸벤젠", fee: 13600, count: 1, span: 1 },
+  { id: "wp_xy", group: "기타항목", name: "크실렌", fee: 13600, count: 1, span: 1 }
+
 ];
 
 const pollutionPresets = [
+  { name: "기본항목 5종", items: ["wp_bod","wp_cod","wp_ss","wp_tn","wp_tp"] },
   { name: "하천 <br><small>생활환경기준 8항목</small>", items: ["wp_ph","wp_bod","wp_toc","wp_ss","wp_do","wp_tp","wp_ecoli1","wp_ecoli2"] },
   { name: "호소 <br><small>생활환경기준 9항목</small>", items: ["wp_ph","wp_toc","wp_ss","wp_do","wp_tp","wp_tn","wp_chla","wp_ecoli1","wp_ecoli2"] },
-  { name: "사람의 건강보호 기준 <br><small>19항목</small>", items: ["wp_cd","wp_pd","wp_sb","wp_as","wp_cn","wp_hg","wp_cr","wp_hcho","wp_dehp","wp_ccl4","wp_c6h6","wp_12dce","wp_dcm","wp_pce","wp_chcl3","wp_pesticides","wp_pcb","wp_abs","wp_14d"] },  
+  { name: "사람의 건강보호 기준 <br><small>19항목</small>", items: ["wp_cd","wp_pd","wp_sb","wp_as","wp_cn","wp_hg","wp_cr6","wp_hcho","wp_dehp","wp_ccl4","wp_c6h6","wp_12dce","wp_dcm","wp_pce","wp_chcl3","wp_pesticides","wp_pcb","wp_abs","wp_14d"] },  
 
+  { name: "지하수 생활용수 <br><small>20항목</small>", items: ["wp_ph","wp_ecoli1","wp_NO3N","wp_clion","wp_cd","wp_as","wp_cn","wp_hg","wp_dia_para","wp_phenols","wp_pb","wp_cr","wp_tce","wp_pce","wp_111tce","wp_c6h6","wp_tol","wp_eb","wp_xy"] },
+  { name: "지하수 농·공·어업용수 <br><small>15항목</small>", items: ["wp_ph","wp_NO3N","wp_clion","wp_cd","wp_as","wp_cn","wp_hg","wp_dia_para","wp_phenols","wp_pb","wp_cr","wp_tce","wp_pce","wp_111tce"] }
 ];
 
 const pollutionOneFeeGroups = [  
@@ -1252,6 +1288,18 @@ const pollutionOneFeeGroups = [
     itemIds: ["wp_pce", "wp_chcl3"],
     reason: ""
   },
+    { name: "휘발성유기화합물3",
+    itemIds: ["wp_pce", "wp_tce","wp_111tce"],
+    reason: ""
+  },
+      { name: "btex",
+    itemIds: ["wp_c6h6", "wp_tol", "wp_eb", "wp_xy"],
+    reason: ""
+  },
+      { name: "pesticides",
+    itemIds: ["wp_pesticides", "wp_dia_para"],
+    reason: ""
+  }
 ];
     
 const pollutionToggleSelectButtons = [
@@ -1270,6 +1318,7 @@ const legalDisplayOrder = [
   "shared-drinking-water-facility",
   "civil-defense-emergency-water",
   "public-bath-water",
+  "hot-spring-bath-water",
   "swimming-pool-water",
   "water-play-facility",
   "water-theme-park",
@@ -1644,6 +1693,57 @@ const legalReferences = [
       }
     ],
     checkedDate: "2026-08-01"
+  }
+
+  ,
+  {
+    id: "hot-spring-bath-water",
+    category: "온천수",
+    title: "온천 목욕장 수질검사",
+    testStandard: ["water"],
+    keywords: ["온천", "온천수", "온천 목욕장", "온천법", "별표 3", "수질검사"],
+    requestBasis: {
+      label: "A. 의뢰 근거",
+      lawName: "온천법 제17조",
+      content: `
+        <p><strong>제17조(온천목욕장의 수질기준 등)</strong></p>
+        <p>① 제16조제2항에 따라 공중의 목욕용으로 제공되는 온천은 「공중위생관리법」 제4조제2항에도 불구하고 행정안전부령으로 정하는 수질기준에 적합하여야 한다. <span class="legal-amendment">&lt;개정 2013. 3. 23., 2014. 11. 19., 2017. 7. 26.&gt;</span></p>
+        <p>② 제1항에 따른 목욕용 온천수의 수질검사 방법과 그 밖에 수질관리에 필요한 사항은 행정안전부령으로 정한다. <span class="legal-amendment">&lt;개정 2013. 3. 23., 2014. 11. 19., 2017. 7. 26.&gt;</span></p>
+      `,
+      url: "https://www.law.go.kr/법령/온천법/제17조"
+    },
+    detailBasis: {
+      label: "B. 세부 기준",
+      lawName: "온천법 시행규칙 제11조",
+      content: `
+        <p><strong>제11조(온천의 수질기준 등)</strong></p>
+        <p>법 제17조에 따라 공중의 목욕용으로 제공되는 온천의 수질기준과 검사방법에 대하여서는 별표 3을 적용한다. <span class="legal-amendment">&lt;개정 2001. 6. 27., 2007. 9. 18.&gt;</span></p>
+      `,
+      url: "https://www.law.go.kr/법령/온천법시행규칙/제11조"
+    },
+    attachments: [
+      {
+        name: "별표 3 온천의 수질기준과 검사방법",
+        url: "https://law.go.kr/LSW//lsBylInfoPLinkR.do?lsiSeq=279391&lsNm=%EC%98%A8%EC%B2%9C%EB%B2%95+%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99&bylNo=0003&bylBrNo=00&bylCls=BE&bylEfYd=20251031&bylEfYdYn=Y"
+      }
+    ],
+    waterStandards: [
+      {
+        name: "원수",
+        rows: [
+          { item: "총대장균군", standard: "100 mL 중 검출되지 아니하여야 한다.", method: "수질" }
+        ]
+      },
+      {
+        name: "욕조수",
+        rows: [
+          { item: "총대장균군", standard: "1 mL 중에서 1개를 초과해서 검출되지 않아야 한다.", method: "수질" },
+          { item: "레지오넬라균(순환여과)", standard: "1,000 CFU/L", method: "" },
+          { item: "유리잔류염소(순환여과+염소소독)", standard: "0.2 ~ 0.4 mg/L", method: "알맞은 방법" }
+        ]
+      }
+    ],
+    checkedDate: "2026-08-04"
   }
 
 ];
