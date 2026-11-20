@@ -903,18 +903,19 @@
   .detail-toggle-btn.active { bottom:min(78vh, 650px); }
   body { padding-bottom: 190px; }
   .cart-section { max-width:920px; margin:0 auto 24px; }
-  .cart-heading-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .cart-heading-row h2 { position:static; margin:0; padding:0 0 7px; }
-  .cart-heading-count { font-size:12px; font-weight:800; color:#64748b; }
+  .cart-heading-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .cart-heading-main { display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
+  .cart-title-input { min-width:0; flex:1; max-width:260px; height:42px; padding:0 13px; border:1px solid #dbe3ef; border-radius:12px; background:#fff; color:#0f172a; font-size:22px; font-weight:900; line-height:1; }
+  .cart-title-input:focus { outline:3px solid rgba(37,99,235,.16); border-color:#93c5fd; }
+  .cart-heading-count { font-size:13px; font-weight:800; color:#64748b; white-space:nowrap; }
   .cart-clear-btn { min-height:38px; padding:8px 12px; border:1px solid #fecaca; border-radius:10px; background:#fff7f7; color:#b91c1c; font-size:13px; font-weight:800; cursor:pointer; }
   .cart-clear-btn:disabled { opacity:.4; cursor:default; }
-  .cart-help { margin:0 0 16px; color:#64748b; font-size:13px; line-height:1.6; }
-  .cart-empty { padding:50px 16px; border:1px dashed #cbd5e1; border-radius:14px; text-align:center; color:#475569; font-weight:800; }
+    .cart-empty { padding:50px 16px; border:1px dashed #cbd5e1; border-radius:14px; text-align:center; color:#475569; font-weight:800; }
   .cart-empty div { margin-top:8px; font-size:12px; font-weight:400; line-height:1.6; }
   .cart-entry { margin-bottom:14px; padding:16px; border:1px solid #e2e8f0; border-radius:14px; background:#fff; box-shadow:0 4px 14px rgba(15,23,42,.04); }
   .cart-entry-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
-  .cart-entry-title { font-size:16px; font-weight:900; line-height:1.4; color:#0f172a; }
-  .cart-entry-meta { margin-top:3px; font-size:12px; color:#64748b; }
+  .cart-entry-title { font-size:19px; font-weight:900; line-height:1.35; color:#0f172a; }
+  .cart-entry-meta { display:none; }
   .cart-remove-btn { flex:0 0 auto; padding:7px 10px; border:1px solid #e2e8f0; border-radius:8px; background:#fff; font-size:12px; color:#b91c1c; font-weight:800; cursor:pointer; }
   .cart-entry-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; font-size:14px; }
   .cart-entry-row strong { font-variant-numeric:tabular-nums; white-space:nowrap; }
@@ -925,8 +926,7 @@
   .cart-qty-control input::-webkit-inner-spin-button { opacity:1; }
   .cart-entry-subtotal { padding-top:11px; border-top:1px solid #e2e8f0; font-weight:900; }
   .cart-entry-subtotal strong { color:#1d4ed8; font-size:18px; }
-  .cart-items-preview { margin-top:12px; padding:10px 12px; border-radius:10px; background:#f8fafc; color:#475569; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
-  .cart-items-preview strong { color:#334155; }
+  .cart-items-preview { display:none; }
   .cart-items-detail { margin-top:4px; padding:6px 12px; border-radius:10px; color:#475569; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
   .cart-items-detail summary { cursor:pointer; font-weight:800; color:#334155; }
   .cart-items-detail p { margin:7px 0 0; }
@@ -936,14 +936,14 @@
   .cart-summary-line.grand-total strong { color:#1d4ed8; font-variant-numeric:tabular-nums; }
   .cart-print-btn { width:100%; min-height:46px; margin-top:15px; border:0; border-radius:10px; background:#111827; color:#fff; font-size:15px; font-weight:900; cursor:pointer; }
   .cart-print-btn:disabled { opacity:.4; cursor:default; }
-  .cart-storage-status { margin:10px 0 0; color:#64748b; font-size:11px; line-height:1.55; }
-  #printArea { display:none; }
+    #printArea { display:none; }
   @media(max-width:480px) {
     .field-tab { font-size:12px; padding:4px 2px; letter-spacing:-.045em; }
     .detail-toggle-btn { bottom:164px; }
     .detail-toggle-btn.active { bottom:min(80vh, 640px); }
     .cart-entry { padding:13px; }
-    .cart-entry-title { font-size:14px; }
+    .cart-entry-title { font-size:17px; }
+    .cart-title-input { max-width:none; font-size:20px; }
     .cart-entry-row { font-size:13px; }
     .cart-qty-control { gap:4px; }
     .cart-qty-control button { width:30px; height:33px; }
@@ -1020,7 +1020,7 @@
     flex:0 0 auto; padding:15px 19px;
     border-bottom:1px solid #e2e8f0; background:#fff;
   }
-  .cart-modal-header strong { font-size:19px; color:#111827; }
+  .cart-modal-symbol { background:#111827; }
   .cart-close-btn { width:40px; height:40px; border:1px solid #e2e8f0; border-radius:50%; background:#f8fafc; font-size:27px; line-height:1; font-weight:400; cursor:pointer; }
   .cart-modal-body { flex:1; overflow-y:auto; overscroll-behavior:contain; padding:18px 16px 28px; }
   .cart-modal .cart-section { max-width:none; margin:0; }
@@ -1036,6 +1036,48 @@
   }
   @media print {
     .cart-modal-backdrop,.cart-modal,.calculator-topbar { display:none !important; }
+  }
+
+
+  /* ===== v4: PC 중앙 고정 폭 + 계산기 서브메뉴만 스크롤 고정 ===== */
+  /* 주 메뉴(법령/수수료 계산기)는 본문과 함께 스크롤 */
+  body.calculator-active .field-tabs {
+    position: static;
+    top: auto;
+  }
+
+  /* 계산 분야(먹는물/수질)와 장바구니 버튼만 화면 상단에 고정 */
+  .calculator-topbar {
+    top: 0;
+  }
+
+  /* 계산기 내 기존 고정 섹션 제목들이 상단 도구막대에 가리지 않도록 간격 확보 */
+  #calculatorContent .section h2 {
+    top: 82px;
+  }
+  #calculatorContent .group-header-row {
+    top: 130px;
+  }
+
+  /* 모바일 계산기의 상단 도구막대 높이에 맞춘 고정 제목 위치 */
+  @media screen and (max-width: 480px) {
+    #calculatorContent .section h2 { top: 75px; }
+    #calculatorContent .group-header-row { top: 123px; }
+  }
+
+  /* PC: 내용/결과 바의 가로 폭을 제한해 화면 중앙에 배치 */
+  @media screen and (min-width: 900px) {
+    html { background: #f3f4f6; }
+    body { max-width: 1080px; margin-left: auto; margin-right: auto; }
+    .bottom-result {
+      left: 50%;
+      right: auto;
+      width: min(1080px, calc(100vw - 32px));
+      transform: translateX(-50%);
+    }
+    .detail-toggle-btn {
+      right: max(18px, calc((100vw - 1080px) / 2 + 18px));
+    }
   }
 
 </style>
@@ -1121,22 +1163,23 @@
 <!-- 장바구니: 2단계 탭과 독립적인 오버레이 (두 계산 분야 통합) -->
 <div id="cartBackdrop" class="cart-modal-backdrop hidden" onclick="closeCart()" aria-hidden="true"></div>
 <div id="cartContent" class="cart-modal hidden" role="dialog" aria-modal="true" aria-label="검사 의뢰 장바구니" tabindex="-1">
-  <div class="cart-modal-header"><strong>장바구니</strong><button type="button" id="closeCartBtn" class="cart-close-btn" onclick="closeCart()" aria-label="장바구니 닫기">×</button></div>
+  <div class="cart-modal-header"><span class="cart-fab-symbol cart-modal-symbol" aria-hidden="true"></span><button type="button" id="closeCartBtn" class="cart-close-btn" onclick="closeCart()" aria-label="장바구니 닫기">×</button></div>
   <div class="cart-modal-body">
   <section class="section cart-section">
     <div class="cart-heading-row">
-      <h2>검사 의뢰 장바구니 <span class="cart-heading-count" id="cartHeadingCount">0건</span></h2>
-      <button type="button" class="cart-clear-btn" id="clearCartBtn" onclick="startNewRequest()">새 민원 처리 · 전체 비우기</button>
+      <div class="cart-heading-main">
+        <input type="text" id="cartTitleInput" class="cart-title-input" value="검체 목록" maxlength="40" aria-label="장바구니 제목">
+        <span class="cart-heading-count" id="cartHeadingCount">0건</span>
+      </div>
+      <button type="button" class="cart-clear-btn" id="clearCartBtn" onclick="startNewRequest()">모두삭제</button>
     </div>
-    <p class="cart-help">검사 항목을 장바구니에 담으면 계산기의 항목 선택이 초기화됩니다. 의뢰별 검체 수는 여기에서 다시 변경할 수 있습니다.</p>
     <div id="cartList"></div>
     <div id="cartEmpty" class="cart-empty">담긴 검사 의뢰가 없습니다.<div>먹는물 또는 수질 수수료 화면에서 항목을 선택한 후 ‘장바구니에 담기’를 눌러주세요.</div></div>
     <div class="cart-summary" id="cartSummary">
-      <div class="cart-summary-line"><span>검사 의뢰</span><strong id="cartOrderCount">0건</strong></div>
-      <div class="cart-summary-line"><span>검체 총수</span><strong id="cartSampleCount">0개</strong></div>
+      <div class="cart-summary-line"><span>검체 종류</span><strong id="cartOrderCount">0종</strong></div>
+      <div class="cart-summary-line"><span>검체 총수</span><strong id="cartSampleCount">0건</strong></div>
       <div class="cart-summary-line grand-total"><span>총 수수료</span><strong id="cartGrandTotal">0원</strong></div>
       <button type="button" id="cartPrintBtn" class="cart-print-btn" onclick="printCart()">A4 인쇄 / PDF 저장</button>
-      <p id="cartStorageStatus" class="cart-storage-status" role="status">이 브라우저에 임시 저장합니다. 수납 완료 기록은 아닙니다.</p>
     </div>
   </section>
   </div>
@@ -2191,6 +2234,7 @@ function changeField(field) {
 
   const isLegal = field === "legal";
   const isCalculator = !isLegal;
+  document.body.classList.toggle("calculator-active", isCalculator);
   if (isCalculator) lastCalculatorField = field;
   document.querySelectorAll(".field-tab").forEach(tab => {
     const active = tab.dataset.field === (isLegal ? "legal" : "calculator");
@@ -2747,8 +2791,11 @@ function calculateTotal() {
 
 /* ===== 장바구니: 저장은 현재 브라우저에만 (개인정보/민원인 성명 미저장) ===== */
 const CART_STORAGE_KEY = "water-fee-calculator-cart-v1";
+const CART_TITLE_STORAGE_KEY = "water-fee-calculator-cart-title-v1";
+const CART_DEFAULT_TITLE = "검체 목록";
 const CART_MAX_QTY = 9999;
 let cart = [];
+let cartTitle = CART_DEFAULT_TITLE;
 let cartStorageAvailable = true;
 let cartStorageMessage = "이 브라우저에 임시 저장합니다. 수납 완료 기록은 아닙니다.";
 
@@ -2788,6 +2835,8 @@ function migrateLegacyColiformEntry(entry) {
 
 function loadCart() {
   try {
+    const storedTitle = localStorage.getItem(CART_TITLE_STORAGE_KEY);
+    if (typeof storedTitle === "string" && storedTitle.trim()) cartTitle = storedTitle.trim().slice(0,40);
     const stored = localStorage.getItem(CART_STORAGE_KEY);
     if (!stored) return;
     const parsed = JSON.parse(stored);
@@ -2814,6 +2863,7 @@ function saveCart() {
   if (!cartStorageAvailable) return;
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    localStorage.setItem(CART_TITLE_STORAGE_KEY, cartTitle);
     cartStorageMessage = "이 브라우저에 임시 저장 중 · 수납 기록이 아니며, 다른 PC와 공유되지 않습니다.";
   } catch (error) {
     cartStorageAvailable = false;
@@ -2875,10 +2925,18 @@ function addCurrentToCart(event) {
   // 현재 계산기에서 항목을 추가하는 반복 흐름이므로 페이지 이동은 하지 않는다.
 }
 
+// 장바구니 건수는 검사 종류가 아닌 모든 의뢰의 검체 수량 합계로 표시한다.
+function getCartTotalSampleCount() {
+  return cart.reduce((sum, entry) => sum + entry.qty, 0);
+}
+
 function updateCartIndicators() {
-  document.getElementById("cartTabCount").textContent = cart.length ? String(cart.length) : "";
-  document.getElementById("openCartBtn").setAttribute("aria-label", `장바구니 열기 · 검사 의뢰 ${cart.length}건`);
-  document.getElementById("cartHeadingCount").textContent = `${cart.length}건`;
+  const totalSamples = getCartTotalSampleCount();
+  document.getElementById("cartTabCount").textContent = totalSamples ? totalSamples.toLocaleString("ko-KR") : "";
+  document.getElementById("openCartBtn").setAttribute("aria-label", `장바구니 열기 · 검체 총 ${totalSamples.toLocaleString("ko-KR")}건`);
+  document.getElementById("cartHeadingCount").textContent = `${totalSamples.toLocaleString("ko-KR")}건`;
+  const titleInput = document.getElementById("cartTitleInput");
+  if (titleInput && titleInput.value !== cartTitle) titleInput.value = cartTitle;
 }
 
 function setCartQty(entryId, value) {
@@ -2900,7 +2958,7 @@ function removeCartEntry(entryId) {
 
 function startNewRequest() {
   if (!cart.length) return;
-  if (!window.confirm("현재 장바구니의 모든 검사 의뢰를 삭제하고 새 민원을 시작할까요? 삭제한 내역은 복구할 수 없습니다.")) return;
+  if (!window.confirm("현재 장바구니의 모든 검사 의뢰를 삭제할까요? 삭제한 내역은 복구할 수 없습니다.")) return;
   cart = [];
   // 새 민원에는 모든 분야의 미확정 선택도 남아 있지 않게 한다.
   for (const state of Object.values(fieldStates)) {
@@ -2924,9 +2982,6 @@ function renderCart() {
   document.getElementById("clearCartBtn").disabled = empty;
   document.getElementById("cartPrintBtn").disabled = empty;
   const legacyEntries = cart.some(entry => entry.itemDetails.some(item => item.id === "ecoliall"));
-  document.getElementById("cartStorageStatus").textContent = legacyEntries
-    ? "주의: 이전 버전의 복합 대장균군 항목이 포함된 의뢰가 있습니다. 정확한 항목 목록을 위해 해당 의뢰를 삭제하고 다시 담아주세요. " + cartStorageMessage
-    : cartStorageMessage;
   updateCartIndicators();
 
   cart.forEach((entry, index) => {
@@ -2938,10 +2993,7 @@ function renderCart() {
     const title = document.createElement("div");
     title.className = "cart-entry-title";
     title.textContent = `${index+1}. ${entry.label}`;
-    const meta = document.createElement("div");
-    meta.className = "cart-entry-meta";
-    meta.textContent = `${entry.field === "drinking" ? "먹는물" : "수질"} · ${entry.itemDetails.reduce((sum, item) => sum+item.count, 0)}개 검사항목`;
-    headText.append(title, meta);
+    headText.append(title);
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "cart-remove-btn";
@@ -3003,28 +3055,18 @@ function renderCart() {
     card.append(subtotalRow);
 
     const names = entry.itemDetails.map(item => item.name);
-    const preview = document.createElement("div");
-    preview.className = "cart-items-preview";
-    const previewLabel = document.createElement("strong");
-    previewLabel.textContent = "검사항목: ";
-    const previewNames = document.createElement("span");
-    previewNames.textContent = names.slice(0, 4).join(", ") + (names.length > 4 ? ` 외 ${names.length - 4}개` : "");
-    preview.append(previewLabel, previewNames);
-    card.append(preview);
-    if (names.length > 4) {
-      const details = document.createElement("details");
-      details.className = "cart-items-detail";
-      const summary = document.createElement("summary");
-      summary.textContent = `전체 ${names.length}개 검사항목 보기`;
-      const content = document.createElement("p");
-      content.textContent = names.join(", ");
-      details.append(summary, content);
-      card.append(details);
-    }
+    const details = document.createElement("details");
+    details.className = "cart-items-detail";
+    const summary = document.createElement("summary");
+    summary.textContent = `전체 ${names.length}개 검사항목 보기`;
+    const content = document.createElement("p");
+    content.textContent = names.join(", ");
+    details.append(summary, content);
+    card.append(details);
     list.append(card);
   });
-  document.getElementById("cartOrderCount").textContent = `${cart.length}건`;
-  document.getElementById("cartSampleCount").textContent = `${cart.reduce((sum, entry) => sum + entry.qty, 0).toLocaleString()}개`;
+  document.getElementById("cartOrderCount").textContent = `${cart.length.toLocaleString("ko-KR")}종`;
+  document.getElementById("cartSampleCount").textContent = `${getCartTotalSampleCount().toLocaleString("ko-KR")}건`;
   document.getElementById("cartGrandTotal").textContent = formatWon(cart.reduce((sum, entry) => sum + entry.unitFee * entry.qty, 0));
   updatePrintArea();
 }
@@ -3046,7 +3088,7 @@ function updatePrintArea() {
       <div class="print-line print-subtotal"><span>소계</span><strong>${formatWon(entry.unitFee * entry.qty)}</strong></div>
       <div class="print-items"><strong>검사항목:</strong> ${escapePrintText(entry.itemDetails.map(item => item.name).join(", "))}</div>
     </div>`).join("");
-  area.innerHTML = `<h1>수질검사 수수료 산정 내역</h1>
+  area.innerHTML = `<h1>${escapePrintText(cartTitle)}</h1>
     <div class="print-subheading">전북특별자치도 보건환경연구원 · 수질조사과</div>
     <div class="print-meta">출력일시: ${escapePrintText(issuedAt)} · 검사 의뢰 ${cart.length}건 · 검체 총 ${cart.reduce((n,e)=>n+e.qty,0)}개</div>
     ${entries}
@@ -3060,6 +3102,18 @@ function printCart() {
   window.print();
 }
 
+function normalizeCartTitle(value) {
+  const text = String(value ?? "").trim().replace(/\s+/g, " ");
+  return (text || CART_DEFAULT_TITLE).slice(0, 40);
+}
+
+function setCartTitle(value) {
+  cartTitle = normalizeCartTitle(value);
+  saveCart();
+  updateCartIndicators();
+  updatePrintArea();
+}
+
 loadCart();
 renderCart();
 
@@ -3068,6 +3122,12 @@ renderItems();
 renderSampleButtons();
 calculateTotal();
 renderLegalReferences();
+
+const cartTitleInputEl = document.getElementById("cartTitleInput");
+cartTitleInputEl.value = cartTitle;
+cartTitleInputEl.addEventListener("change", event => { setCartTitle(event.target.value); event.target.value = cartTitle; });
+cartTitleInputEl.addEventListener("blur", event => { setCartTitle(event.target.value); event.target.value = cartTitle; });
+cartTitleInputEl.addEventListener("keydown", event => { if (event.key === "Enter") event.target.blur(); });
 
 document.getElementById("legalSearch").addEventListener("input", event => {
   renderLegalReferences(event.target.value);
