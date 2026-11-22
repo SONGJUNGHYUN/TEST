@@ -899,9 +899,9 @@
   .add-cart-btn:disabled { background:#6b7280; color:#e5e7eb; cursor:not-allowed; }
   .bottom-result { cursor:default; }
   .sheet-handle, .bottom-row, .total-row, .selected-detail { cursor:pointer; }
-  .detail-toggle-btn { bottom: 164px; }
+  .detail-toggle-btn { bottom: 126px; }
   .detail-toggle-btn.active { bottom:min(78vh, 650px); }
-  body { padding-bottom: 190px; }
+  body { padding-bottom: 160px; }
   .cart-section { max-width:920px; margin:0 auto 24px; }
   .cart-heading-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .cart-heading-main { display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
@@ -913,8 +913,10 @@
     .cart-empty { padding:50px 16px; border:1px dashed #cbd5e1; border-radius:14px; text-align:center; color:#475569; font-weight:800; }
   .cart-empty div { margin-top:8px; font-size:12px; font-weight:400; line-height:1.6; }
   .cart-entry { margin-bottom:14px; padding:16px; border:1px solid #e2e8f0; border-radius:14px; background:#fff; box-shadow:0 4px 14px rgba(15,23,42,.04); }
-  .cart-entry-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
-  .cart-entry-title { font-size:19px; font-weight:900; line-height:1.35; color:#0f172a; }
+  .cart-entry-top { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .cart-entry-top > div:first-child { min-width:0; flex:1 1 auto; }
+  .cart-entry-title { font-size:21px; font-weight:900; line-height:1.38; color:#0f172a; overflow-wrap:break-word; word-break:keep-all; }
+  .cart-entry-unit-fee { flex:0 0 auto; font-size:13px; font-weight:800; color:#475569; white-space:nowrap; font-variant-numeric:tabular-nums; }
   .cart-entry-meta { display:none; }
   .cart-remove-btn { flex:0 0 auto; padding:7px 10px; border:1px solid #e2e8f0; border-radius:8px; background:#fff; font-size:12px; color:#b91c1c; font-weight:800; cursor:pointer; }
   .cart-entry-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; font-size:14px; }
@@ -939,10 +941,12 @@
     #printArea { display:none; }
   @media(max-width:480px) {
     .field-tab { font-size:12px; padding:4px 2px; letter-spacing:-.045em; }
-    .detail-toggle-btn { bottom:164px; }
+    .detail-toggle-btn { bottom:126px; }
     .detail-toggle-btn.active { bottom:min(80vh, 640px); }
     .cart-entry { padding:13px; }
-    .cart-entry-title { font-size:17px; }
+    .cart-entry-top { gap:7px; }
+    .cart-entry-title { font-size:19px; }
+    .cart-entry-unit-fee { font-size:12px; }
     .cart-title-input { max-width:none; font-size:20px; }
     .cart-entry-row { font-size:13px; }
     .cart-qty-control { gap:4px; }
@@ -955,7 +959,7 @@
     body > :not(#printArea) { display:none !important; }
     #printArea { display:block !important; width:100%; color:#111827; font-family:Arial,sans-serif; font-size:11pt; }
     #printArea h1 { margin:0; padding:0; border:0; box-shadow:none; font-size:18pt; text-align:center; }
-    .print-subheading { text-align:center; font-size:10pt; margin:3mm 0 8mm; color:#475569; }
+    .print-subheading { text-align:center; font-size:13pt; font-weight:700; margin:3mm 0 7mm; color:#334155; }
     .print-meta { font-size:9pt; color:#475569; margin:0 0 6mm; }
     .print-entry { page-break-inside:avoid; break-inside:avoid; padding:4mm 0; border-top:1px solid #94a3b8; }
     .print-title { font-size:12pt; font-weight:800; margin-bottom:2mm; }
@@ -1124,16 +1128,8 @@
 <div class="bottom-result" id="bottomResult" onclick="toggleDetailViewFromSheet(event)">
   <div class="sheet-handle"></div>
   <div class="bottom-row">
-    <span>실제 항목 수</span>
+    <span>항목 수</span>
     <span><span id="actualItemCount">0</span>개</span>
-  </div>
-  <div class="bottom-row">
-    <span>검체 수</span>
-    <span><span id="sampleCountText">1</span>개</span>
-  </div>
-  <div class="bottom-row">
-    <span>항목 수수료 합계</span>
-    <span><span id="subtotal">0</span>원</span>
   </div>
   <div class="total-row">
     <span>총 수수료</span>
@@ -2783,8 +2779,6 @@ function calculateTotal() {
   const total = subtotal * sampleCount;
 
   document.getElementById("actualItemCount").textContent = actualItemCount;
-  document.getElementById("sampleCountText").textContent = sampleCount;
-  document.getElementById("subtotal").textContent = subtotal.toLocaleString();
   document.getElementById("total").textContent = total.toLocaleString();
   document.getElementById("addCartBtn").disabled = selected.length === 0;
 }
@@ -2992,25 +2986,20 @@ function renderCart() {
     const headText = document.createElement("div");
     const title = document.createElement("div");
     title.className = "cart-entry-title";
-    title.textContent = `${index+1}. ${entry.label}`;
+    title.textContent = entry.label;
     headText.append(title);
+    const unitFeeBadge = document.createElement("span");
+    unitFeeBadge.className = "cart-entry-unit-fee";
+    unitFeeBadge.textContent = formatWon(entry.unitFee);
+    unitFeeBadge.setAttribute("aria-label", `검체당 수수료 ${formatWon(entry.unitFee)}`);
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "cart-remove-btn";
     remove.textContent = "삭제";
     remove.setAttribute("aria-label", `${index+1}번 검사 의뢰 삭제`);
     remove.onclick = () => removeCartEntry(entry.id);
-    heading.append(headText, remove);
+    heading.append(headText, unitFeeBadge, remove);
     card.append(heading);
-
-    const feeRow = document.createElement("div");
-    feeRow.className = "cart-entry-row";
-    const feeLabel = document.createElement("span");
-    feeLabel.textContent = "검체당 수수료";
-    const feeValue = document.createElement("strong");
-    feeValue.textContent = formatWon(entry.unitFee);
-    feeRow.append(feeLabel, feeValue);
-    card.append(feeRow);
 
     const qtyRow = document.createElement("div");
     qtyRow.className = "cart-entry-row";
@@ -3088,9 +3077,9 @@ function updatePrintArea() {
       <div class="print-line print-subtotal"><span>소계</span><strong>${formatWon(entry.unitFee * entry.qty)}</strong></div>
       <div class="print-items"><strong>검사항목:</strong> ${escapePrintText(entry.itemDetails.map(item => item.name).join(", "))}</div>
     </div>`).join("");
-  area.innerHTML = `<h1>${escapePrintText(cartTitle)}</h1>
-    <div class="print-subheading">전북특별자치도 보건환경연구원 · 수질조사과</div>
-    <div class="print-meta">출력일시: ${escapePrintText(issuedAt)} · 검사 의뢰 ${cart.length}건 · 검체 총 ${cart.reduce((n,e)=>n+e.qty,0)}개</div>
+  area.innerHTML = `<h1>수질조사과 수수료 안내</h1>
+    <div class="print-subheading">${escapePrintText(cartTitle)}</div>
+    <div class="print-meta">전북특별자치도 보건환경연구원 · 수질조사과<br>출력일시: ${escapePrintText(issuedAt)} · 검사 의뢰 ${cart.length}건 · 검체 총 ${cart.reduce((n,e)=>n+e.qty,0)}개</div>
     ${entries}
     <div class="print-total"><span>전체 수수료</span><strong>${formatWon(cart.reduce((sum,e)=>sum+e.unitFee*e.qty,0))}</strong></div>
     <div class="print-note">※ 본 문서는 수수료 산정·납부 안내용이며, 수납 완료를 증명하는 영수증이 아닙니다.<br>※ 장바구니에 담을 때 계산된 단가가 적용되었습니다.</div>`;
